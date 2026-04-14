@@ -18,6 +18,7 @@
       --danger:#dc2626;
       --max-width:1200px;
       --sidebar-width:280px;
+      --text:#0f172a;
     }
     @media (prefers-color-scheme:dark){
       :root{
@@ -27,14 +28,15 @@
         --accent:#06b6d4;
         --glass: rgba(10,14,20,0.6);
         --shadow: 0 8px 30px rgba(2,6,23,0.6);
+        --text:#e6eef7;
       }
     }
 
-    html,body{height:100%;margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:var(--bg); color: #0f172a;}
+    html,body{height:100%;margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:var(--bg); color:var(--text); -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;}
     *{box-sizing:border-box}
     a{color:inherit;text-decoration:none}
     .container{max-width:var(--max-width);margin:0 auto;padding:20px;}
-    .layout{display:flex;gap:20px;align-items:stretch;}
+    .layout{display:flex;gap:20px;align-items:stretch;min-height:100vh;padding-bottom:20px;}
 
     /* Sidebar */
     .sidebar{
@@ -60,12 +62,12 @@
     nav ul{list-style:none;padding:0;margin:0}
     nav li{margin:6px 0}
     .nav-link{
-      display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px;color:var(--muted);font-weight:600;
+      display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px;color:var(--muted);font-weight:600;transition:background .18s,color .18s;
     }
     .nav-link svg{width:18px;height:18px;flex-shrink:0;opacity:0.9}
-    .nav-link:hover{background:rgba(99,102,241,0.06);color:#0f172a}
+    .nav-link:hover{background:rgba(99,102,241,0.06);color:var(--text)}
     @media (prefers-color-scheme:dark){
-      .nav-link:hover{background:rgba(15,23,42,0.5);color:#e6eef7}
+      .nav-link:hover{background:rgba(15,23,42,0.5);color:var(--text)}
       .nav-link{color:var(--muted)}
     }
     .separator{height:1px;background:rgba(15,23,42,0.06);margin:12px 0;border-radius:2px}
@@ -80,6 +82,7 @@
       display:flex;
       flex-direction:column;
       gap:16px;
+      width:100%;
     }
     header.topbar{
       display:flex;align-items:center;justify-content:space-between;padding:14px;border-radius:12px;
@@ -95,11 +98,11 @@
       min-width:220px;
     }
     .search input{border:0;background:transparent;outline:0;font-size:14px;width:100%}
-    .btn{padding:8px 12px;border-radius:10px;border:0;background:#eef2ff;color:#0f172a;font-weight:600;cursor:pointer}
+    .btn{padding:8px 12px;border-radius:10px;border:0;background:#eef2ff;color:var(--text);font-weight:600;cursor:pointer}
     .btn.primary{background:linear-gradient(90deg,var(--accent),#7c3aed);color:#fff}
     .btn.ghost{background:transparent;border:1px solid rgba(15,23,42,0.06)}
     @media (prefers-color-scheme:dark){
-      .btn{background:rgba(255,255,255,0.03);color:#e6eef7;border:1px solid rgba(255,255,255,0.03)}
+      .btn{background:rgba(255,255,255,0.03);color:var(--text);border:1px solid rgba(255,255,255,0.03)}
       .btn.ghost{border:1px solid rgba(255,255,255,0.06)}
     }
 
@@ -129,10 +132,10 @@
     .owner-sub{font-size:12px;color:var(--muted);margin-top:6px}
 
     .avatar{
-      width:40px;height:40px;border-radius:10px;background:linear-gradient(180deg,#eef2ff,#e0f2fe);display:inline-flex;align-items:center;justify-content:center;font-weight:700;color:#0f172a
+      width:40px;height:40px;border-radius:10px;background:linear-gradient(180deg,#eef2ff,#e0f2fe);display:inline-flex;align-items:center;justify-content:center;font-weight:700;color:var(--text)
     }
     @media (prefers-color-scheme:dark){
-      .avatar{background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));color:#e6eef7}
+      .avatar{background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));color:var(--text)}
     }
 
     .stage{display:inline-flex;padding:6px 8px;border-radius:999px;font-weight:700;font-size:12px}
@@ -159,6 +162,8 @@
       .sidebar{display:none}
       .mobile-header{display:flex;align-items:center;gap:10px}
       .mobile-menu-btn{display:inline-flex}
+      .container{padding:12px;}
+      .layout{gap:12px;}
     }
 
     /* Offcanvas panel for mobile navigation */
@@ -175,6 +180,9 @@
     .muted{color:var(--muted)}
     .right{margin-left:auto}
     .ks-sm{font-size:12px}
+
+    /* Utility for overflow scrolling tables on small screens */
+    .scroll-x{overflow:auto;-webkit-overflow-scrolling:touch}
   </style>
 </head>
 <body>
@@ -194,13 +202,13 @@
 
         <nav>
           <ul>
-            <li><a class="nav-link" href="/dashboard" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 10.5L12 3l9 7.5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 22V12h6v10" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Overview</span></a></li>
-            <li><a class="nav-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" stroke-width="1.6"/><circle cx="9" cy="7" r="4" stroke-width="1.6"/></svg><span>Contacts</span></a></li>
-            <li><a class="nav-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="7" width="20" height="14" rx="2" stroke-width="1.6"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" stroke-width="1.6"/></svg><span>Deals</span></a></li>
-            <li><a class="nav-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 11l3 3L22 4" stroke-width="1.6"/><path d="M2 20h7" stroke-width="1.6"/><path d="M2 14h7" stroke-width="1.6"/><path d="M2 8h7" stroke-width="1.6"/></svg><span>Tasks</span></a></li>
-            <li><a class="nav-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 3v18h18" stroke-width="1.6"/><path d="M7 13l3-3 3 3 4-4" stroke-width="1.6"/></svg><span>Reports</span></a></li>
+            <li><a class="nav-link" href="/dashboard" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M3 10.5L12 3l9 7.5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 22V12h6v10" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Overview</span></a></li>
+            <li><a class="nav-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" stroke-width="1.6"/><circle cx="9" cy="7" r="4" stroke-width="1.6"/></svg><span>Contacts</span></a></li>
+            <li><a class="nav-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="7" width="20" height="14" rx="2" stroke-width="1.6"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" stroke-width="1.6"/></svg><span>Deals</span></a></li>
+            <li><a class="nav-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M9 11l3 3L22 4" stroke-width="1.6"/><path d="M2 20h7" stroke-width="1.6"/><path d="M2 14h7" stroke-width="1.6"/><path d="M2 8h7" stroke-width="1.6"/></svg><span>Tasks</span></a></li>
+            <li><a class="nav-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M3 3v18h18" stroke-width="1.6"/><path d="M7 13l3-3 3 3 4-4" stroke-width="1.6"/></svg><span>Reports</span></a></li>
             <li><div class="separator" role="separator"></div></li>
-            <li><a class="nav-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" stroke-width="1.6"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83" stroke-width="1.2"/></svg><span>Settings</span></a></li>
+            <li><a class="nav-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" stroke-width="1.6"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83" stroke-width="1.2"/></svg><span>Settings</span></a></li>
           </ul>
         </nav>
       </aside>
@@ -210,13 +218,13 @@
         <!-- Top header -->
         <header class="topbar" role="banner" aria-label="Top Bar">
           <div class="top-left">
-            <div class="mobile-header" style="display:none">
-              <!-- Mobile menu button (visible on small screens via CSS) -->
+            <div class="mobile-header" aria-hidden="true">
+              <!-- Placeholder for mobile header controls if needed -->
             </div>
             <div>
               <div style="display:flex;align-items:center;gap:10px">
                 <button class="mobile-menu-btn btn ghost" id="openMobileNav" aria-controls="mobile-navigation" aria-expanded="false" title="Open navigation" style="display:none">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
                 </button>
                 <div class="title">
                   <h2>Dashboard</h2>
@@ -226,11 +234,11 @@
             </div>
           </div>
 
-          <div class="actions">
-            <div class="search" role="search" aria-label="Search contacts and deals">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="11" cy="11" r="6" stroke="currentColor" stroke-width="1.6"/></svg>
+          <div class="actions" role="region" aria-label="Top Actions">
+            <form class="search" role="search" aria-label="Search contacts and deals" onsubmit="return false;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="11" cy="11" r="6" stroke="currentColor" stroke-width="1.6"/></svg>
               <input type="search" placeholder="Search contacts, deals..." aria-label="Search" />
-            </div>
+            </form>
             <button class="btn ghost" title="Create new contact" aria-label="New Contact" style="display:none">New Contact</button>
             <button class="btn" title="Create new contact" aria-label="New Contact" style="display:inline-block">New Contact</button>
             <button class="btn primary" title="Create new deal" aria-label="New Deal">New Deal</button>
@@ -290,7 +298,7 @@
               <div class="muted ks-sm">5 deals</div>
             </div>
 
-            <div style="overflow:auto;">
+            <div class="scroll-x" style="overflow:auto;">
               <table role="table" aria-describedby="dealsHeading">
                 <thead>
                   <tr>
@@ -313,7 +321,7 @@
                       </div>
                     </td>
                     <td>Alex Murphy</td>
-                    <td><span class="stage neg">Negotiation</span></td>
+                    <td><span class="stage neg" aria-hidden="true">Negotiation</span></td>
                     <td>$48,000</td>
                     <td class="muted">2h ago</td>
                   </tr>
@@ -329,7 +337,7 @@
                       </div>
                     </td>
                     <td>Dana Scully</td>
-                    <td><span class="stage prop">Proposal</span></td>
+                    <td><span class="stage prop" aria-hidden="true">Proposal</span></td>
                     <td>$96,500</td>
                     <td class="muted">4h ago</td>
                   </tr>
@@ -345,7 +353,7 @@
                       </div>
                     </td>
                     <td>Peter Gibbons</td>
-                    <td><span class="stage disc">Discovery</span></td>
+                    <td><span class="stage disc" aria-hidden="true">Discovery</span></td>
                     <td>$12,300</td>
                     <td class="muted">Today</td>
                   </tr>
@@ -361,7 +369,7 @@
                       </div>
                     </td>
                     <td>Ellen Ripley</td>
-                    <td><span class="stage contract">Contract</span></td>
+                    <td><span class="stage contract" aria-hidden="true">Contract</span></td>
                     <td>$210,000</td>
                     <td class="muted">Yesterday</td>
                   </tr>
@@ -377,7 +385,7 @@
                       </div>
                     </td>
                     <td>Jill Valentine</td>
-                    <td><span class="stage qual">Qualification</span></td>
+                    <td><span class="stage qual" aria-hidden="true">Qualification</span></td>
                     <td>$7,800</td>
                     <td class="muted">Mon</td>
                   </tr>
@@ -429,7 +437,7 @@
           </aside>
         </section>
 
-        <div class="spacer"></div>
+        <div class="spacer" aria-hidden="true"></div>
 
         <footer class="muted ks-sm" role="contentinfo" aria-label="Footer">
           © <span id="year"></span> Your Company — Internal CRM. Built for productivity.
@@ -440,14 +448,14 @@
 
   <!-- Mobile navigation offcanvas -->
   <div id="mobileNav" class="offcanvas" aria-hidden="true">
-    <div class="panel" role="dialog" aria-modal="true" aria-label="Mobile navigation">
+    <div class="panel" role="dialog" aria-modal="true" aria-label="Mobile navigation" id="mobile-navigation">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
         <h2 style="margin:0">Navigation</h2>
         <div style="margin-left:auto"><button class="close-btn" id="closeMobileNav" aria-label="Close navigation">Close ✕</button></div>
       </div>
       <nav>
         <ul>
-          <li style="margin:8px 0"><a class="nav-link" href="/dashboard"><svg viewBox="0 0 24 24" fill="none"><path d="M3 10.5L12 3l9 7.5" stroke-width="1.6"/><path d="M9 22V12h6v10" stroke-width="1.6"/></svg>Overview</a></li>
+          <li style="margin:8px 0"><a class="nav-link" href="/dashboard"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 10.5L12 3l9 7.5" stroke-width="1.6"/><path d="M9 22V12h6v10" stroke-width="1.6"/></svg>Overview</a></li>
           <li style="margin:8px 0"><a class="nav-link" href="#">Contacts</a></li>
           <li style="margin:8px 0"><a class="nav-link" href="#">Deals</a></li>
           <li style="margin:8px 0"><a class="nav-link" href="#">Tasks</a></li>
@@ -460,52 +468,63 @@
   </div>
 
   <script>
-    // Small scripts for interactivity
+    // Small scripts for interactivity — defensive checks to avoid runtime errors in environments where elements may not exist
     (function(){
-      // Set year in footer
-      document.getElementById('year').textContent = new Date().getFullYear();
+      try {
+        var yearEl = document.getElementById('year');
+        if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-      var openBtn = document.getElementById('openMobileNav');
-      var closeBtn = document.getElementById('closeMobileNav');
-      var mobileNav = document.getElementById('mobileNav');
+        var openBtn = document.getElementById('openMobileNav');
+        var closeBtn = document.getElementById('closeMobileNav');
+        var mobileNav = document.getElementById('mobileNav');
 
-      function openNav(){
-        mobileNav.classList.add('open');
-        mobileNav.setAttribute('aria-hidden','false');
-        openBtn && openBtn.setAttribute('aria-expanded','true');
-      }
-      function closeNav(){
-        mobileNav.classList.remove('open');
-        mobileNav.setAttribute('aria-hidden','true');
-        openBtn && openBtn.setAttribute('aria-expanded','false');
-      }
-
-      if(openBtn){
-        openBtn.addEventListener('click', function(){ openNav(); });
-      }
-      if(closeBtn){
-        closeBtn.addEventListener('click', function(){ closeNav(); });
-      }
-      // close when clicking backdrop
-      mobileNav.addEventListener('click', function(e){
-        if(e.target === mobileNav) closeNav();
-      });
-
-      // Show mobile menu button based on viewport
-      function refreshMenuButton(){
-        var mb = document.querySelector('.mobile-menu-btn');
-        if(!mb) return;
-        if(window.innerWidth < 1024){
-          mb.style.display = 'inline-flex';
-          mb.setAttribute('aria-hidden','false');
-        } else {
-          mb.style.display = 'none';
-          mb.setAttribute('aria-hidden','true');
-          closeNav();
+        function openNav(){
+          if (!mobileNav) return;
+          mobileNav.classList.add('open');
+          mobileNav.setAttribute('aria-hidden','false');
+          openBtn && openBtn.setAttribute('aria-expanded','true');
         }
+        function closeNav(){
+          if (!mobileNav) return;
+          mobileNav.classList.remove('open');
+          mobileNav.setAttribute('aria-hidden','true');
+          openBtn && openBtn.setAttribute('aria-expanded','false');
+        }
+
+        if (openBtn){
+          openBtn.addEventListener('click', function(){ openNav(); });
+        }
+        if (closeBtn){
+          closeBtn.addEventListener('click', function(){ closeNav(); });
+        }
+        // close when clicking backdrop
+        if (mobileNav){
+          mobileNav.addEventListener('click', function(e){
+            if (e.target === mobileNav) closeNav();
+          });
+        }
+
+        // Show mobile menu button based on viewport
+        function refreshMenuButton(){
+          var mb = document.querySelector('.mobile-menu-btn');
+          if(!mb) return;
+          if(window.innerWidth < 1024){
+            mb.style.display = 'inline-flex';
+            mb.setAttribute('aria-hidden','false');
+          } else {
+            mb.style.display = 'none';
+            mb.setAttribute('aria-hidden','true');
+            closeNav();
+          }
+        }
+        window.addEventListener('resize', refreshMenuButton);
+        // Run once after load
+        refreshMenuButton();
+      } catch (err) {
+        // Fail silently — keep page usable
+        // eslint-disable-next-line no-console
+        console.error('Dashboard script error', err);
       }
-      window.addEventListener('resize', refreshMenuButton);
-      refreshMenuButton();
     })();
   </script>
 </body>
