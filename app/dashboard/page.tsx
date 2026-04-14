@@ -1,299 +1,512 @@
-"use client";
-import Link from "next/link";
-import type { ReactNode } from "react";
-import { Button } from "../../components/ui/button";
-import { Badge } from "../../components/ui/badge";
-import { Separator } from "../../components/ui/separator";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "../../components/ui/sheet";
-// Inline icons (simple, lightweight SVGs)
-function IconHome(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
-      <path d="M3 10.5 12 3l9 7.5" />
-      <path d="M9 22V12h6v10" />
-    </svg>
-  );
-}
-function IconUsers(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
-      <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-      <circle cx="9" cy="7" r="4" />
-      <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-      <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-    </svg>
-  );
-}
-function IconBriefcase(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
-      <rect x="2" y="7" width="20" height="14" rx="2" />
-      <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
-    </svg>
-  );
-}
-function IconChecklist(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
-      <path d="M9 11l3 3L22 4" />
-      <path d="M2 20h7" />
-      <path d="M2 14h7" />
-      <path d="M2 8h7" />
-    </svg>
-  );
-}
-function IconChart(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
-      <path d="M3 3v18h18" />
-      <path d="M7 13l3-3 3 3 4-4" />
-    </svg>
-  );
-}
-function IconSettings(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
-      <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
-      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06A2 2 0 1 1 3.21 19l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H2a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06A2 2 0 1 1 5.04 3.2l.06.06a1.65 1.65 0 0 0 1.82.33H7a1.65 1.65 0 0 0 1-1.51V2a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06A2 2 0 1 1 20.8 5.04l-.06.06a1.65 1.65 0 0 0-.33 1.82V7c0 .67.39 1.27 1 1.51.31.13.65.2 1 .2H22a2 2 0 1 1 0 4h-.09c-.35 0-.69.07-1 .2-.61.24-1 .84-1 1.51z" />
-    </svg>
-  );
-}
-function IconMenu(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" {...props}>
-      <path d="M3 6h18M3 12h18M3 18h18" />
-    </svg>
-  );
-}
-const stats = [
-  { title: "Total Contacts", value: "12,482", delta: "+3.1%", deltaType: "up" as const },
-  { title: "Open Deals", value: "148", delta: "-1.2%", deltaType: "down" as const },
-  { title: "Monthly Revenue", value: "$238k", delta: "+5.6%", deltaType: "up" as const },
-  { title: "Churn", value: "1.8%", delta: "-0.2%", deltaType: "down" as const },
-];
-const deals = [
-  { name: "Acme Corp Renewal", owner: "Alex Murphy", stage: "Negotiation", value: "$48,000", updated: "2h ago" },
-  { name: "Globex Expansion", owner: "Dana Scully", stage: "Proposal", value: "$96,500", updated: "4h ago" },
-  { name: "Initech Pilot", owner: "Peter Gibbons", stage: "Discovery", value: "$12,300", updated: "Today" },
-  { name: "Soylent Migration", owner: "Ellen Ripley", stage: "Contract", value: "$210,000", updated: "Yesterday" },
-  { name: "Umbrella Support", owner: "Jill Valentine", stage: "Qualification", value: "$7,800", updated: "Mon" },
-];
-const activities = [
-  { who: "Sam Carter", action: "logged a call with", target: "Acme Corp", time: "1h ago" },
-  { who: "Alex Murphy", action: "created a deal for", target: "Globex", time: "3h ago" },
-  { who: "Dana Scully", action: "updated stage for", target: "Initech Pilot", time: "5h ago" },
-  { who: "Peter Gibbons", action: "added a note to", target: "Soylent Migration", time: "Yesterday" },
-];
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CRM Dashboard</title>
+  <meta name="description" content="Internal CRM dashboard — contacts, deals, and activity overview." />
+  <style>
+    :root{
+      --bg:#f8fafc;
+      --card:#ffffff;
+      --muted:#6b7280;
+      --accent:#0ea5a4;
+      --glass: rgba(255,255,255,0.6);
+      --radius:12px;
+      --shadow: 0 6px 18px rgba(16,24,40,0.06);
+      --success:#059669;
+      --danger:#dc2626;
+      --max-width:1200px;
+      --sidebar-width:280px;
+    }
+    @media (prefers-color-scheme:dark){
+      :root{
+        --bg:#0b1220;
+        --card:#071022;
+        --muted:#9aa3b2;
+        --accent:#06b6d4;
+        --glass: rgba(10,14,20,0.6);
+        --shadow: 0 8px 30px rgba(2,6,23,0.6);
+      }
+    }
 
-function SidebarNav({ className }: { className?: string }) {
-  return (
-    <nav className={`p-4 ${className ?? ""}`}>
-      <ul className="space-y-1">
-        <li>
-          <Link href="/dashboard" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-slate-800">
-            <IconHome className="w-5 h-5" />
-            <span className="text-sm font-medium">Overview</span>
-          </Link>
-        </li>
-        <li>
-          <Link href="#" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-slate-800">
-            <IconUsers className="w-5 h-5" />
-            <span className="text-sm font-medium">Contacts</span>
-          </Link>
-        </li>
-        <li>
-          <Link href="#" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-slate-800">
-            <IconBriefcase className="w-5 h-5" />
-            <span className="text-sm font-medium">Deals</span>
-          </Link>
-        </li>
-        <li>
-          <Link href="#" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-slate-800">
-            <IconChecklist className="w-5 h-5" />
-            <span className="text-sm font-medium">Tasks</span>
-          </Link>
-        </li>
-        <li>
-          <Link href="#" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-slate-800">
-            <IconChart className="w-5 h-5" />
-            <span className="text-sm font-medium">Reports</span>
-          </Link>
-        </li>
-        <li>
-          <Separator className="my-2" />
-        </li>
-        <li>
-          <Link href="#" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-slate-800">
-            <IconSettings className="w-5 h-5" />
-            <span className="text-sm font-medium">Settings</span>
-          </Link>
-        </li>
-      </ul>
-    </nav>
-  );
-}
+    html,body{height:100%;margin:0;font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:var(--bg); color: #0f172a;}
+    *{box-sizing:border-box}
+    a{color:inherit;text-decoration:none}
+    .container{max-width:var(--max-width);margin:0 auto;padding:20px;}
+    .layout{display:flex;gap:20px;align-items:stretch;}
 
-function StatCard({ title, value, delta, deltaType }: { title: string; value: string; delta: string; deltaType: "up" | "down" }) {
-  return (
-    <div className="bg-white dark:bg-slate-900 shadow-sm rounded-md p-4">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-xs text-muted-foreground uppercase tracking-wide">{title}</p>
-          <p className="mt-1 text-2xl font-semibold">{value}</p>
+    /* Sidebar */
+    .sidebar{
+      width:var(--sidebar-width);
+      background:linear-gradient(180deg, rgba(255,255,255,0.8), rgba(255,255,255,0.6));
+      border-radius:12px;
+      padding:18px;
+      box-shadow:var(--shadow);
+      position:relative;
+      min-height:420px;
+      flex-shrink:0;
+    }
+    @media (prefers-color-scheme:dark){
+      .sidebar{background:linear-gradient(180deg, rgba(7,16,34,0.6), rgba(7,16,34,0.45));}
+    }
+    .brand{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+    .brand h1{font-size:18px;margin:0}
+    .badge{background:#eef2ff;color:#3730a3;font-weight:600;padding:4px 8px;border-radius:999px;font-size:12px}
+    @media (prefers-color-scheme:dark){
+      .badge{background:#0f172a;color:#7dd3fc;}
+    }
+
+    nav ul{list-style:none;padding:0;margin:0}
+    nav li{margin:6px 0}
+    .nav-link{
+      display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px;color:var(--muted);font-weight:600;
+    }
+    .nav-link svg{width:18px;height:18px;flex-shrink:0;opacity:0.9}
+    .nav-link:hover{background:rgba(99,102,241,0.06);color:#0f172a}
+    @media (prefers-color-scheme:dark){
+      .nav-link:hover{background:rgba(15,23,42,0.5);color:#e6eef7}
+      .nav-link{color:var(--muted)}
+    }
+    .separator{height:1px;background:rgba(15,23,42,0.06);margin:12px 0;border-radius:2px}
+    @media (prefers-color-scheme:dark){
+      .separator{background:rgba(255,255,255,0.03)}
+    }
+
+    /* Main column */
+    .main{
+      flex:1;
+      min-height:80vh;
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+    }
+    header.topbar{
+      display:flex;align-items:center;justify-content:space-between;padding:14px;border-radius:12px;
+      background:var(--card);box-shadow:var(--shadow);
+    }
+    .top-left{display:flex;align-items:center;gap:12px}
+    .title{line-height:1}
+    .title h2{margin:0;font-size:18px}
+    .title p{margin:0;color:var(--muted);font-size:13px}
+    .actions{display:flex;align-items:center;gap:8px}
+    .search{
+      display:flex;align-items:center;gap:8px;background:var(--glass);padding:8px;border-radius:10px;border:1px solid rgba(15,23,42,0.04);
+      min-width:220px;
+    }
+    .search input{border:0;background:transparent;outline:0;font-size:14px;width:100%}
+    .btn{padding:8px 12px;border-radius:10px;border:0;background:#eef2ff;color:#0f172a;font-weight:600;cursor:pointer}
+    .btn.primary{background:linear-gradient(90deg,var(--accent),#7c3aed);color:#fff}
+    .btn.ghost{background:transparent;border:1px solid rgba(15,23,42,0.06)}
+    @media (prefers-color-scheme:dark){
+      .btn{background:rgba(255,255,255,0.03);color:#e6eef7;border:1px solid rgba(255,255,255,0.03)}
+      .btn.ghost{border:1px solid rgba(255,255,255,0.06)}
+    }
+
+    /* Stats */
+    .stats-grid{display:grid;grid-template-columns:repeat(1,1fr);gap:12px}
+    @media(min-width:640px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(min-width:1024px){.stats-grid{grid-template-columns:repeat(4,1fr)}}
+    .stat{
+      background:var(--card);padding:14px;border-radius:12px;box-shadow:var(--shadow);display:flex;justify-content:space-between;align-items:center;
+    }
+    .stat .label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em}
+    .stat .value{font-size:22px;font-weight:700;margin-top:6px}
+    .pill{padding:6px 8px;border-radius:999px;font-size:12px;font-weight:700}
+
+    /* Content layout */
+    .content-grid{display:grid;grid-template-columns:1fr;gap:16px}
+    @media(min-width:1024px){.content-grid{grid-template-columns:2fr 1fr}}
+    .card{background:var(--card);padding:16px;border-radius:12px;box-shadow:var(--shadow)}
+    .card h3{margin:0 0 8px 0;font-size:14px}
+    table{width:100%;border-collapse:collapse;font-size:14px}
+    thead th{text-align:left;font-size:12px;color:var(--muted);text-transform:uppercase;padding:10px 8px}
+    tbody td{padding:12px 8px;border-top:1px solid rgba(15,23,42,0.04)}
+    @media (prefers-color-scheme:dark){
+      tbody td{border-top:1px solid rgba(255,255,255,0.03)}
+    }
+    tr:hover td{background:rgba(99,102,241,0.03)}
+    .owner-sub{font-size:12px;color:var(--muted);margin-top:6px}
+
+    .avatar{
+      width:40px;height:40px;border-radius:10px;background:linear-gradient(180deg,#eef2ff,#e0f2fe);display:inline-flex;align-items:center;justify-content:center;font-weight:700;color:#0f172a
+    }
+    @media (prefers-color-scheme:dark){
+      .avatar{background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));color:#e6eef7}
+    }
+
+    .stage{display:inline-flex;padding:6px 8px;border-radius:999px;font-weight:700;font-size:12px}
+    .stage.neg{background:#fef3c7;color:#92400e}
+    .stage.prop{background:#dbeafe;color:#1e40af}
+    .stage.disc{background:#ede9fe;color:#3730a3}
+    .stage.contract{background:#dcfce7;color:#065f46}
+    .stage.qual{background:#f3e8ff;color:#6b21a8}
+    .stage.other{background:#f3f4f6;color:#111827}
+
+    .activity-item{display:flex;gap:12px;align-items:flex-start;padding:8px;border-radius:8px}
+    .activity-item .meta{font-size:13px}
+    .activity-item .time{font-size:12px;color:var(--muted);margin-top:6px}
+
+    /* Footer spacer */
+    .spacer{height:12px}
+
+    /* Mobile: hide sidebar, show menu */
+    .mobile-header{
+      display:none;
+    }
+    .mobile-menu-btn{display:none}
+    @media(max-width:1023px){
+      .sidebar{display:none}
+      .mobile-header{display:flex;align-items:center;gap:10px}
+      .mobile-menu-btn{display:inline-flex}
+    }
+
+    /* Offcanvas panel for mobile navigation */
+    .offcanvas{
+      position:fixed;inset:0;background:rgba(2,6,23,0.45);display:none;align-items:stretch;z-index:60;
+    }
+    .offcanvas.open{display:flex}
+    .offcanvas .panel{
+      width:260px;background:var(--card);padding:18px;border-radius:12px;margin:40px 12px;box-shadow:var(--shadow);height:calc(100% - 80px);overflow:auto;
+    }
+    .close-btn{background:transparent;border:0;color:var(--muted);font-weight:700;padding:8px;cursor:pointer}
+
+    /* small helpers */
+    .muted{color:var(--muted)}
+    .right{margin-left:auto}
+    .ks-sm{font-size:12px}
+  </style>
+</head>
+<body>
+  <div class="container" role="application" aria-label="CRM Dashboard">
+    <div class="layout">
+
+      <!-- Sidebar (desktop) -->
+      <aside class="sidebar" aria-label="Primary Navigation">
+        <div class="brand">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 10.5L12 3l9 7.5" stroke="#7c3aed" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 22V12h6v10" stroke="#06b6d4" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div>
+            <h1>CRM</h1>
+            <div class="ks-sm muted">Customer Relationship</div>
+          </div>
+          <div style="margin-left:auto"><span class="badge">Beta</span></div>
         </div>
-        <div className="text-sm font-medium">
-          <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs ${deltaType === "up" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
-            {delta}
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-}
 
-function stageColor(stage: string) {
-  const s = stage.toLowerCase();
-  if (s.includes("negoti")) return "bg-yellow-100 text-yellow-800";
-  if (s.includes("proposal")) return "bg-blue-100 text-blue-800";
-  if (s.includes("discovery")) return "bg-indigo-100 text-indigo-800";
-  if (s.includes("contract")) return "bg-green-100 text-green-800";
-  if (s.includes("qual")) return "bg-purple-100 text-purple-800";
-  return "bg-gray-100 text-gray-800";
-}
+        <nav>
+          <ul>
+            <li><a class="nav-link" href="/dashboard" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 10.5L12 3l9 7.5" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 22V12h6v10" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Overview</span></a></li>
+            <li><a class="nav-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" stroke-width="1.6"/><circle cx="9" cy="7" r="4" stroke-width="1.6"/></svg><span>Contacts</span></a></li>
+            <li><a class="nav-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="7" width="20" height="14" rx="2" stroke-width="1.6"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" stroke-width="1.6"/></svg><span>Deals</span></a></li>
+            <li><a class="nav-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 11l3 3L22 4" stroke-width="1.6"/><path d="M2 20h7" stroke-width="1.6"/><path d="M2 14h7" stroke-width="1.6"/><path d="M2 8h7" stroke-width="1.6"/></svg><span>Tasks</span></a></li>
+            <li><a class="nav-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 3v18h18" stroke-width="1.6"/><path d="M7 13l3-3 3 3 4-4" stroke-width="1.6"/></svg><span>Reports</span></a></li>
+            <li><div class="separator" role="separator"></div></li>
+            <li><a class="nav-link" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" stroke-width="1.6"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83" stroke-width="1.2"/></svg><span>Settings</span></a></li>
+          </ul>
+        </nav>
+      </aside>
 
-export default function Page(): ReactNode {
-  return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex">
-          {/* Sidebar for md+ */}
-          <aside className="hidden md:block w-64 border-r border-gray-200 dark:border-slate-800 min-h-screen">
-            <div className="flex items-center gap-2 p-4">
-              <h1 className="text-lg font-semibold">CRM</h1>
-              <Badge className="ml-auto">Beta</Badge>
+      <!-- Main content area -->
+      <main class="main" role="main">
+        <!-- Top header -->
+        <header class="topbar" role="banner" aria-label="Top Bar">
+          <div class="top-left">
+            <div class="mobile-header" style="display:none">
+              <!-- Mobile menu button (visible on small screens via CSS) -->
             </div>
-            <SidebarNav />
-          </aside>
-
-          {/* Main content area */}
-          <div className="flex-1 min-h-screen">
-            {/* Top header */}
-            <header className="sticky top-0 z-10 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800">
-              <div className="flex items-center justify-between gap-4 p-4">
-                <div className="flex items-center gap-3">
-                  {/* Sheet for mobile sidebar */}
-                  <Sheet>
-                    <SheetTrigger asChild>
-                      <Button variant="ghost" className="p-2 md:hidden">
-                        <IconMenu className="w-5 h-5" />
-                      </Button>
-                    </SheetTrigger>
-                    <SheetContent side="left" className="w-64">
-                      <SheetHeader>
-                        <SheetTitle>Navigation</SheetTitle>
-                      </SheetHeader>
-                      <SidebarNav />
-                    </SheetContent>
-                  </Sheet>
-
-                  <div>
-                    <h2 className="text-lg font-semibold">Dashboard</h2>
-                    <p className="text-sm text-muted-foreground">Overview of your CRM activity</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <div className="hidden sm:flex items-center bg-gray-100 dark:bg-slate-800 rounded-md px-2 py-1 gap-2">
-                    <input aria-label="Search" placeholder="Search contacts, deals..." className="bg-transparent outline-none text-sm px-2 py-1" />
-                  </div>
-                  <Button className="hidden sm:inline-flex" variant="default">New Contact</Button>
-                  <Button variant="primary" className="inline-flex items-center">
-                    New Deal
-                  </Button>
+            <div>
+              <div style="display:flex;align-items:center;gap:10px">
+                <button class="mobile-menu-btn btn ghost" id="openMobileNav" aria-controls="mobile-navigation" aria-expanded="false" title="Open navigation" style="display:none">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                </button>
+                <div class="title">
+                  <h2>Dashboard</h2>
+                  <p>Overview of your CRM activity</p>
                 </div>
               </div>
-            </header>
+            </div>
+          </div>
 
-            {/* Content */}
-            <main className="p-4">
-              {/* Stat cards */}
-              <section className="mb-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                  {stats.map((s) => (
-                    <StatCard key={s.title} title={s.title} value={s.value} delta={s.delta} deltaType={s.deltaType} />
-                  ))}
-                </div>
-              </section>
+          <div class="actions">
+            <div class="search" role="search" aria-label="Search contacts and deals">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="11" cy="11" r="6" stroke="currentColor" stroke-width="1.6"/></svg>
+              <input type="search" placeholder="Search contacts, deals..." aria-label="Search" />
+            </div>
+            <button class="btn ghost" title="Create new contact" aria-label="New Contact" style="display:none">New Contact</button>
+            <button class="btn" title="Create new contact" aria-label="New Contact" style="display:inline-block">New Contact</button>
+            <button class="btn primary" title="Create new deal" aria-label="New Deal">New Deal</button>
+          </div>
+        </header>
 
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {/* Deals table */}
-                <section className="lg:col-span-2 bg-white dark:bg-slate-900 shadow-sm rounded-md p-4">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-sm font-semibold">Active Deals</h3>
-                    <div className="text-sm text-muted-foreground">{deals.length} deals</div>
-                  </div>
-                  <div className="overflow-auto">
-                    <table className="w-full text-sm">
-                      <thead>
-                        <tr className="text-left text-xs uppercase text-muted-foreground">
-                          <th className="py-2 pr-4">Deal</th>
-                          <th className="py-2 pr-4">Owner</th>
-                          <th className="py-2 pr-4">Stage</th>
-                          <th className="py-2 pr-4">Value</th>
-                          <th className="py-2 pr-4">Updated</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y">
-                        {deals.map((d) => (
-                          <tr key={d.name} className="hover:bg-gray-50 dark:hover:bg-slate-800">
-                            <td className="py-3 pr-4">
-                              <div className="font-medium">{d.name}</div>
-                              <div className="text-xs text-muted-foreground">{d.name.split(" ")[0]}</div>
-                            </td>
-                            <td className="py-3 pr-4">{d.owner}</td>
-                            <td className="py-3 pr-4">
-                              <Badge className={`px-2 py-1 ${stageColor(d.stage)}`}>{d.stage}</Badge>
-                            </td>
-                            <td className="py-3 pr-4">{d.value}</td>
-                            <td className="py-3 pr-4 text-muted-foreground">{d.updated}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </section>
+        <!-- Stats -->
+        <section aria-label="Key metrics">
+          <div class="stats-grid" role="list">
+            <div class="stat" role="listitem">
+              <div>
+                <div class="label">Total Contacts</div>
+                <div class="value">12,482</div>
+              </div>
+              <div aria-hidden="true">
+                <span class="pill" style="background:#ecfdf5;color:#065f46">+3.1%</span>
+              </div>
+            </div>
 
-                {/* Recent activity */}
-                <aside className="bg-white dark:bg-slate-900 shadow-sm rounded-md p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="text-sm font-semibold">Recent Activity</h3>
-                    <Button variant="ghost" className="text-xs">View All</Button>
-                  </div>
-                  <div className="space-y-3">
-                    {activities.map((a, idx) => (
-                      <div key={idx} className="flex items-start gap-3">
-                        <div className="w-9 h-9 rounded-full bg-gray-100 dark:bg-slate-800 flex items-center justify-center text-sm font-medium">
-                          {a.who.split(" ").map((s) => s[0]).slice(0,2).join("")}
-                        </div>
-                        <div className="flex-1">
-                          <div className="text-sm">
-                            <span className="font-medium">{a.who}</span>{" "}
-                            <span className="text-muted-foreground">{a.action}</span>{" "}
-                            <span className="font-medium">{a.target}</span>
-                          </div>
-                          <div className="text-xs text-muted-foreground mt-1">{a.time}</div>
+            <div class="stat" role="listitem">
+              <div>
+                <div class="label">Open Deals</div>
+                <div class="value">148</div>
+              </div>
+              <div aria-hidden="true">
+                <span class="pill" style="background:#fff1f2;color:#991b1b">-1.2%</span>
+              </div>
+            </div>
+
+            <div class="stat" role="listitem">
+              <div>
+                <div class="label">Monthly Revenue</div>
+                <div class="value">$238k</div>
+              </div>
+              <div aria-hidden="true">
+                <span class="pill" style="background:#ecfdf5;color:#065f46">+5.6%</span>
+              </div>
+            </div>
+
+            <div class="stat" role="listitem">
+              <div>
+                <div class="label">Churn</div>
+                <div class="value">1.8%</div>
+              </div>
+              <div aria-hidden="true">
+                <span class="pill" style="background:#fff1f2;color:#991b1b">-0.2%</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="content-grid" aria-label="Main content panels">
+          <!-- Deals table -->
+          <article class="card" aria-labelledby="dealsHeading">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+              <h3 id="dealsHeading">Active Deals</h3>
+              <div class="muted ks-sm">5 deals</div>
+            </div>
+
+            <div style="overflow:auto;">
+              <table role="table" aria-describedby="dealsHeading">
+                <thead>
+                  <tr>
+                    <th scope="col">Deal</th>
+                    <th scope="col">Owner</th>
+                    <th scope="col">Stage</th>
+                    <th scope="col">Value</th>
+                    <th scope="col">Updated</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <div style="display:flex;gap:10px;align-items:center">
+                        <div class="avatar" aria-hidden="true">AC</div>
+                        <div>
+                          <div style="font-weight:700">Acme Corp Renewal</div>
+                          <div class="owner-sub muted">Acme</div>
                         </div>
                       </div>
-                    ))}
-                  </div>
-                </aside>
+                    </td>
+                    <td>Alex Murphy</td>
+                    <td><span class="stage neg">Negotiation</span></td>
+                    <td>$48,000</td>
+                    <td class="muted">2h ago</td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      <div style="display:flex;gap:10px;align-items:center">
+                        <div class="avatar" aria-hidden="true">GE</div>
+                        <div>
+                          <div style="font-weight:700">Globex Expansion</div>
+                          <div class="owner-sub muted">Globex</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>Dana Scully</td>
+                    <td><span class="stage prop">Proposal</span></td>
+                    <td>$96,500</td>
+                    <td class="muted">4h ago</td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      <div style="display:flex;gap:10px;align-items:center">
+                        <div class="avatar" aria-hidden="true">IP</div>
+                        <div>
+                          <div style="font-weight:700">Initech Pilot</div>
+                          <div class="owner-sub muted">Initech</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>Peter Gibbons</td>
+                    <td><span class="stage disc">Discovery</span></td>
+                    <td>$12,300</td>
+                    <td class="muted">Today</td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      <div style="display:flex;gap:10px;align-items:center">
+                        <div class="avatar" aria-hidden="true">SM</div>
+                        <div>
+                          <div style="font-weight:700">Soylent Migration</div>
+                          <div class="owner-sub muted">Soylent</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>Ellen Ripley</td>
+                    <td><span class="stage contract">Contract</span></td>
+                    <td>$210,000</td>
+                    <td class="muted">Yesterday</td>
+                  </tr>
+
+                  <tr>
+                    <td>
+                      <div style="display:flex;gap:10px;align-items:center">
+                        <div class="avatar" aria-hidden="true">US</div>
+                        <div>
+                          <div style="font-weight:700">Umbrella Support</div>
+                          <div class="owner-sub muted">Umbrella</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>Jill Valentine</td>
+                    <td><span class="stage qual">Qualification</span></td>
+                    <td>$7,800</td>
+                    <td class="muted">Mon</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </article>
+
+          <!-- Recent activity -->
+          <aside class="card" aria-labelledby="activityHeading">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+              <h3 id="activityHeading">Recent Activity</h3>
+              <button class="btn ghost" aria-label="View all activity">View All</button>
+            </div>
+
+            <div>
+              <div class="activity-item">
+                <div class="avatar" style="width:36px;height:36px;border-radius:999px;background:linear-gradient(90deg,#fef3c7,#fde68a)">SC</div>
+                <div>
+                  <div class="meta"><strong>Sam Carter</strong> <span class="muted">logged a call with</span> <strong>Acme Corp</strong></div>
+                  <div class="time muted">1h ago</div>
+                </div>
               </div>
 
-              <div className="h-8" />
-            </main>
-          </div>
-        </div>
-      </div>
+              <div class="activity-item">
+                <div class="avatar" style="width:36px;height:36px;border-radius:999px;background:linear-gradient(90deg,#e0f2fe,#bae6fd)">AM</div>
+                <div>
+                  <div class="meta"><strong>Alex Murphy</strong> <span class="muted">created a deal for</span> <strong>Globex</strong></div>
+                  <div class="time muted">3h ago</div>
+                </div>
+              </div>
+
+              <div class="activity-item">
+                <div class="avatar" style="width:36px;height:36px;border-radius:999px;background:linear-gradient(90deg,#ede9fe,#ddd6fe)">DS</div>
+                <div>
+                  <div class="meta"><strong>Dana Scully</strong> <span class="muted">updated stage for</span> <strong>Initech Pilot</strong></div>
+                  <div class="time muted">5h ago</div>
+                </div>
+              </div>
+
+              <div class="activity-item">
+                <div class="avatar" style="width:36px;height:36px;border-radius:999px;background:linear-gradient(90deg,#dcfce7,#bbf7d0)">PG</div>
+                <div>
+                  <div class="meta"><strong>Peter Gibbons</strong> <span class="muted">added a note to</span> <strong>Soylent Migration</strong></div>
+                  <div class="time muted">Yesterday</div>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </section>
+
+        <div class="spacer"></div>
+
+        <footer class="muted ks-sm" role="contentinfo" aria-label="Footer">
+          © <span id="year"></span> Your Company — Internal CRM. Built for productivity.
+        </footer>
+      </main>
     </div>
-  ) as unknown as ReactNode;
-}
+  </div>
+
+  <!-- Mobile navigation offcanvas -->
+  <div id="mobileNav" class="offcanvas" aria-hidden="true">
+    <div class="panel" role="dialog" aria-modal="true" aria-label="Mobile navigation">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <h2 style="margin:0">Navigation</h2>
+        <div style="margin-left:auto"><button class="close-btn" id="closeMobileNav" aria-label="Close navigation">Close ✕</button></div>
+      </div>
+      <nav>
+        <ul>
+          <li style="margin:8px 0"><a class="nav-link" href="/dashboard"><svg viewBox="0 0 24 24" fill="none"><path d="M3 10.5L12 3l9 7.5" stroke-width="1.6"/><path d="M9 22V12h6v10" stroke-width="1.6"/></svg>Overview</a></li>
+          <li style="margin:8px 0"><a class="nav-link" href="#">Contacts</a></li>
+          <li style="margin:8px 0"><a class="nav-link" href="#">Deals</a></li>
+          <li style="margin:8px 0"><a class="nav-link" href="#">Tasks</a></li>
+          <li style="margin:8px 0"><a class="nav-link" href="#">Reports</a></li>
+          <li style="margin:12px 0"><div class="separator"></div></li>
+          <li style="margin:8px 0"><a class="nav-link" href="#">Settings</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+  <script>
+    // Small scripts for interactivity
+    (function(){
+      // Set year in footer
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      var openBtn = document.getElementById('openMobileNav');
+      var closeBtn = document.getElementById('closeMobileNav');
+      var mobileNav = document.getElementById('mobileNav');
+
+      function openNav(){
+        mobileNav.classList.add('open');
+        mobileNav.setAttribute('aria-hidden','false');
+        openBtn && openBtn.setAttribute('aria-expanded','true');
+      }
+      function closeNav(){
+        mobileNav.classList.remove('open');
+        mobileNav.setAttribute('aria-hidden','true');
+        openBtn && openBtn.setAttribute('aria-expanded','false');
+      }
+
+      if(openBtn){
+        openBtn.addEventListener('click', function(){ openNav(); });
+      }
+      if(closeBtn){
+        closeBtn.addEventListener('click', function(){ closeNav(); });
+      }
+      // close when clicking backdrop
+      mobileNav.addEventListener('click', function(e){
+        if(e.target === mobileNav) closeNav();
+      });
+
+      // Show mobile menu button based on viewport
+      function refreshMenuButton(){
+        var mb = document.querySelector('.mobile-menu-btn');
+        if(!mb) return;
+        if(window.innerWidth < 1024){
+          mb.style.display = 'inline-flex';
+          mb.setAttribute('aria-hidden','false');
+        } else {
+          mb.style.display = 'none';
+          mb.setAttribute('aria-hidden','true');
+          closeNav();
+        }
+      }
+      window.addEventListener('resize', refreshMenuButton);
+      refreshMenuButton();
+    })();
+  </script>
+</body>
+</html>
